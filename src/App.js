@@ -29,6 +29,14 @@ const App = () => {
   }, []);
 
   const totalPages = Math.ceil(employees.length / employeesPerPage);
+
+  // Ensure currentPage is never out of range after employees change
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages || 1);
+    }
+  }, [employees, currentPage, totalPages]);
+
   const lastIndex = currentPage * employeesPerPage;
   const firstIndex = lastIndex - employeesPerPage;
   const currentEmployees = employees.slice(firstIndex, lastIndex);
