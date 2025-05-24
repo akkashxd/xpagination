@@ -2,7 +2,13 @@ import React from 'react';
 
 const EmployeeTable = ({ employees }) => {
   return (
-    <table border="1" width="100%" cellPadding="10" style={{ borderCollapse: 'collapse' }}>
+    <table
+      border="1"
+      width="100%"
+      cellPadding="10"
+      style={{ borderCollapse: 'collapse' }}
+      data-testid="employee-table"
+    >
       <thead>
         <tr>
           <th>ID</th>
@@ -23,7 +29,7 @@ const EmployeeTable = ({ employees }) => {
           ))
         ) : (
           <tr>
-            <td colSpan="4" align="center">
+            <td colSpan="4" align="center" data-testid="no-data-row">
               No data available
             </td>
           </tr>

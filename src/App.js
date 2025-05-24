@@ -6,6 +6,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const employeesPerPage = 10;
 
+  // Fetch employee data
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -23,10 +24,20 @@ const App = () => {
     fetchEmployees();
   }, []);
 
+  // Total pages calculation
+  const totalPages = Math.ceil(employees.length / employeesPerPage);
+
+  // Ensure currentPage is within valid range after data fetch
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages || 1); // fallback to 1 if no data
+    }
+  }, [employees, totalPages]);
+
+  // Pagination logic
   const lastIndex = currentPage * employeesPerPage;
   const firstIndex = lastIndex - employeesPerPage;
   const currentEmployees = employees.slice(firstIndex, lastIndex);
-  const totalPages = Math.ceil(employees.length / employeesPerPage);
 
   const handleNext = () => {
     if (currentPage < totalPages) {
@@ -43,11 +54,12 @@ const App = () => {
   return (
     <div style={{ padding: '20px' }}>
       <h2>Employee Data</h2>
+
       <EmployeeTable employees={currentEmployees} />
-      
+
       <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <button 
-          onClick={handlePrevious} 
+        <button
+          onClick={handlePrevious}
           disabled={currentPage === 1}
           data-testid="previous-button"
         >
@@ -56,8 +68,8 @@ const App = () => {
 
         <p>{currentPage}</p>
 
-        <button 
-          onClick={handleNext} 
+        <button
+          onClick={handleNext}
           disabled={currentPage === totalPages}
           data-testid="next-button"
         >
