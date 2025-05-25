@@ -1,4 +1,4 @@
-// EmployeeTable.js
+// components/EmployeeTable.js
 import React, { useEffect, useState } from "react";
 
 const API_URL =
@@ -9,26 +9,35 @@ const EmployeeTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  // Fetch data
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("API error");
-        return res.json();
-      })
-      .then((data) => setEmployees(data))
-      .catch(() => alert("failed to fetch data"));
+    const fetchData = async () => {
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error("Network error");
+        const data = await res.json();
+        setEmployees(data);
+      } catch (error) {
+        alert("failed to fetch data");
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = employees.slice(startIndex, startIndex + itemsPerPage);
   const totalPages = Math.ceil(employees.length / itemsPerPage);
 
+  // Calculate current page's data
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = employees.slice(startIndex, startIndex + itemsPerPage);
+
+  // Handlers
   const handlePrevious = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+    setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
   };
 
   return (
